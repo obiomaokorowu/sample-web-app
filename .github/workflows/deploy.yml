@@ -86,10 +86,11 @@ jobs:
       - name: Helm upgrade/install
         env:
            IMAGE_TAG: ${{ github.run_number }}
+           CHART: ./web-app
         run: |
            ECR_URI="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}"
-           helm upgrade --install "${{ env.RELEASE_NAME }}" ./web-app \
+           helm upgrade --install "${{ env.RELEASE_NAME }}" ${{ env.CHART }} \
              -n "${{ env.NAMESPACE }}" --create-namespace \
              --set image.repository="${ECR_URI}" \
              --set image.tag="${IMAGE_TAG}" \
-             -f ./web-app/values.yaml
+             -f ${{ env.CHART }}/values.yaml
